@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title> 1. Javascript Drum Kit </title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="css/style.css">
+	</head>
+	<body>
+		<div class="keys"></div>
+		<script>
+			const sounds = [
+				['A', 'clap'],
+				['S', 'hihat'],
+				['D', 'kick'],
+				['F', 'openhat'],
+				['G', 'boom'],
+				['H', 'ride'],
+				['J', 'snare'],
+				['K', 'tom'],
+				['L', 'tink']
+			];	
+			const audioList = {};
+			const keysDiv = document.querySelector('.keys');
+			
+			for (const [key, audio] of sounds) {
+				const code = key.charCodeAt(0),
+					div = document.createElement('div');
+				div.classList.add('key'); 
+				div.innerHTML = `<kbd>${key}</kbd><span class="sound">${audio}</span>`;
+				console.log(`sounds/${audio}.wav`);
+				div.ontransitionend = removeTransition;
+				keysDiv.appendChild(div);
+				audioList[code] = [new Audio(`sounds/${audio}.wav`), div];
+			} 
+
+		  	function removeTransition(e) {
+		   		if (e.propertyName !== 'transform') return;
+		   	 	e.target.classList.remove('playing');
+		 	}
+
+		 	function playSound(e) {
+		 		const c = e.keyCode;
+		 		if (!audioList[c]) { return; }
+		 		const [audios, div] = audioList[c];
+			    div.classList.add('playing');
+			    audios.currentTime = 0;
+			    audios.play();
+		 	}
+
+		  	window.addEventListener('keydown', playSound );
+
+		</script>
+
+	</body>
+</html>

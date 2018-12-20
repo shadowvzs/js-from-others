@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title> 10. Hold Shift to Check Multiple Checkbox </title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="css/style.css">
+	</head>
+	<body>
+		
+		<div class="container"></div>
+			  
+		<script>
+			let lastChecked;
+			const container = document.querySelector('.container');
+			const list = [
+				[11, "checkbox"],
+				[2, "checkbox"],
+				[31, "checkbox"],
+				[48, "checkbox"],
+				[85, "checkbox"],
+				[69, "checkbox"],
+				[27, "checkbox"],
+				[58, "checkbox"],
+				[91, "checkbox"],
+				[19, "checkbox"],
+				[27, "checkbox"]
+			];
+			const item = (id, text) => `<div class="item"><input type="checkbox"><p>${text}: ${id}</p></div>`;
+			
+		
+			container.innerHTML = list.reduce((content,data) => content + item(...data), "");
+			const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+
+			function handleCheck(e) {
+				// Check if they had the shift key down
+				// AND check that they are checking it
+				let inBetween = false;
+				if (e.shiftKey && this.checked) {
+					// go ahead and do what we please
+					// loop over every single checkbox
+					checkboxes.forEach(checkbox => {
+						console.log(checkbox);
+						if (checkbox === this || checkbox === lastChecked) {
+							inBetween = !inBetween;
+							console.log('Starting to check them inbetween!');
+						}
+
+						if (inBetween) {
+							checkbox.checked = true;
+						}
+					});
+				}
+
+				lastChecked = this;
+			}
+
+			checkboxes.forEach(checkbox => checkbox.addEventListener('click', handleCheck));
+			
+		</script>
+	</body>
+</html>
